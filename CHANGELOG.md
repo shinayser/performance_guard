@@ -1,3 +1,8 @@
+## 1.0.1
+
+* Updated repository and homepage URLs
+* Added topics for pub.dev discoverability
+
 ## 1.0.0
 
 * Initial release

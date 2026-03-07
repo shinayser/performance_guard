@@ -1,6 +1,6 @@
 name: performance_guard
 description: Production-grade Flutter plugin for detecting ANRs, UI freezes, and performance issues
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/Amansrivastava534/performance_guard
 repository: https://github.com/Amansrivastava534/performance_guard
 issue_tracker: https://github.com/Amansrivastava534/performance_guard/issues
