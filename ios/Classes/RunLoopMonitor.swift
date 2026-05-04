@@ -202,8 +202,21 @@ class RunLoopMonitor {
     }
 
     private func getAppState() -> String {
-        let app = UIApplication.shared
-        switch app.applicationState {
+        // UIApplication.shared must be accessed on the main thread (enforced in Swift 6).
+        // This method may be called from a background monitoring queue, so we read
+        // the state safely via a synchronous main-thread dispatch.
+        if Thread.isMainThread {
+            return appStateString(UIApplication.shared.applicationState)
+        }
+        var state = "unknown"
+        DispatchQueue.main.sync {
+            state = appStateString(UIApplication.shared.applicationState)
+        }
+        return state
+    }
+
+    private func appStateString(_ applicationState: UIApplication.State) -> String {
+        switch applicationState {
         case .active: return "active"
         case .inactive: return "inactive"
         case .background: return "background"

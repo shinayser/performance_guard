@@ -12,9 +12,12 @@ and performance issues in real-time on both Android and iOS.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.platform = :ios, '12.0'
+  # iOS 13+ required: iOS 12 support was dropped in Xcode 16+.
+  # iOS 13 also adds arm64 simulator support needed for Apple Silicon Macs (iOS 26+ simulators).
+  s.platform = :ios, '13.0'
 
-  # Flutter.framework does not contain an i386 slice.
+  # Only exclude legacy i386 (32-bit) simulator slice — do NOT exclude arm64,
+  # which is required for Apple Silicon iOS 26+ simulators.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
   s.swift_version = '5.0'
 end
