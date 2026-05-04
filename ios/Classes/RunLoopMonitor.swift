@@ -232,10 +232,10 @@ struct ThreadInfo {
     let callStack: [String]
 }
 
-// Mach kernel constants
-private let TH_STATE_RUNNING = 1
-private let TH_STATE_STOPPED = 2
-private let TH_STATE_WAITING = 3
-private let TH_STATE_UNINTERRUPTIBLE = 4
-private let TH_STATE_HALTED = 5
-private let THREAD_INFO_MAX = 10
+// Mach kernel constants — must be Int32 to match thread_basic_info.run_state type
+private let TH_STATE_RUNNING: Int32 = 1
+private let TH_STATE_STOPPED: Int32 = 2
+private let TH_STATE_WAITING: Int32 = 3
+private let TH_STATE_UNINTERRUPTIBLE: Int32 = 4
+private let TH_STATE_HALTED: Int32 = 5
+private let THREAD_INFO_MAX: Int32 = 10
