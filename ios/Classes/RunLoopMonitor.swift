@@ -202,8 +202,21 @@ class RunLoopMonitor {
     }
 
     private func getAppState() -> String {
-        let app = UIApplication.shared
-        switch app.applicationState {
+        // UIApplication.shared must be accessed on the main thread (enforced in Swift 6).
+        // This method may be called from a background monitoring queue, so we read
+        // the state safely via a synchronous main-thread dispatch.
+        if Thread.isMainThread {
+            return appStateString(UIApplication.shared.applicationState)
+        }
+        var state = "unknown"
+        DispatchQueue.main.sync {
+            state = appStateString(UIApplication.shared.applicationState)
+        }
+        return state
+    }
+
+    private func appStateString(_ applicationState: UIApplication.State) -> String {
+        switch applicationState {
         case .active: return "active"
         case .inactive: return "inactive"
         case .background: return "background"
@@ -219,10 +232,10 @@ struct ThreadInfo {
     let callStack: [String]
 }
 
-// Mach kernel constants
-private let TH_STATE_RUNNING = 1
-private let TH_STATE_STOPPED = 2
-private let TH_STATE_WAITING = 3
-private let TH_STATE_UNINTERRUPTIBLE = 4
-private let TH_STATE_HALTED = 5
-private let THREAD_INFO_MAX = 10
+// Mach kernel constants — must be Int32 to match thread_basic_info.run_state type
+private let TH_STATE_RUNNING: Int32 = 1
+private let TH_STATE_STOPPED: Int32 = 2
+private let TH_STATE_WAITING: Int32 = 3
+private let TH_STATE_UNINTERRUPTIBLE: Int32 = 4
+private let TH_STATE_HALTED: Int32 = 5
+private let THREAD_INFO_MAX: Int32 = 10
